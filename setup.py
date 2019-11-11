@@ -10,7 +10,6 @@ setup(
   url = "https://github.com/jbaber/make_indices",
   packages = ['make_indices'],
   install_requires = ['docopt', 'python-magic',],
-  tests_require=['pytest'],
   entry_points = {
     'console_scripts': ['make-indices=make_indices.make_indices:main'],
   }
