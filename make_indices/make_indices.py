@@ -249,15 +249,22 @@ def main():
 
 def unroot(root_path, full_path):
   """
-  TODO: Put a doctest here
+  >>> unroot("/a/b", "/a/b/c/d/e")
+  'c/d/e'
 
-  root_path like "/a/b"
-  full_path like "/a/b/c/d/e"
-  returns "c/d/e"
+  Trailing / on root_path is optional
 
-  Trailing / on full_path is optional
+  >>> unroot("/a/b/", "/a/b/c/d/e")
+  'c/d/e'
 
   If no common root, return `None`
+
+  >>> unroot("a/b/", "/a/b/c/d/e") == None
+  True
+  >>> unroot("a/b/", "a/b/c/d/e")
+  'c/d/e'
+  >>> unroot("b/", "a/b/c/d/e") == None
+  True
 
   This shouldn't be so hard.
   """
