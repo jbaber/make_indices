@@ -316,6 +316,8 @@ def make_indices(thumbs_root, images_root, thumbs_root_in_href,
 
       cur_images_dir = os.path.join(images_root, rootless)
 
+      rootless_parts = rootless.split(os.path.sep)
+
       cur_index_filename = os.path.join(index_root, "_".join(["index"] + rootless_parts)) + ".html"
       cur_indexv_filename = os.path.join(index_root, "_".join(["indexv"] + rootless_parts)) + ".html"
 
