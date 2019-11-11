@@ -247,6 +247,37 @@ def main():
       f.write(line)
 
 
+def unroot(root_path, full_path):
+  """
+  TODO: Put a doctest here
+
+  root_path like "/a/b"
+  full_path like "/a/b/c/d/e"
+  returns "c/d/e"
+
+  Trailing / on full_path is optional
+
+  If no common root, return `None`
+
+  This shouldn't be so hard.
+  """
+  root_path_parts = root_path.split(os.path.sep)
+
+  # Ignore possible trailing /
+  if root_path_parts[-1] == "":
+    root_path_parts.pop(-1)
+
+  full_path_parts = full_path.split(os.path.sep)
+
+  # If they don't begin with the same stuff, have no idea what's going on
+  if full_path_parts[0: len(root_path_parts)] != root_path_parts:
+    return None
+
+  rootless_parts = full_path_parts[len(root_path_parts):]
+
+  return os.path.join(*rootless_parts)
+
+
 def make_indices(thumbs_root, images_root, thumbs_root_in_href,
     index_root, clobber=False, *, itemsBaseURL):
   created_indices = []
