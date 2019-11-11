@@ -247,23 +247,23 @@ def main():
       f.write(line)
 
 
-def unroot(root_path, full_path):
+def unroot(*, root_path, full_path):
   """
-  >>> unroot("/a/b", "/a/b/c/d/e")
+  >>> unroot(root_path="/a/b", full_path="/a/b/c/d/e")
   'c/d/e'
 
   Trailing / on root_path is optional
 
-  >>> unroot("/a/b/", "/a/b/c/d/e")
+  >>> unroot(root_path="/a/b/", full_path="/a/b/c/d/e")
   'c/d/e'
 
   If no common root, return `None`
 
-  >>> unroot("a/b/", "/a/b/c/d/e") == None
+  >>> unroot(root_path="a/b/", full_path="/a/b/c/d/e") == None
   True
-  >>> unroot("a/b/", "a/b/c/d/e")
+  >>> unroot(root_path="a/b/", full_path="a/b/c/d/e")
   'c/d/e'
-  >>> unroot("b/", "a/b/c/d/e") == None
+  >>> unroot(root_path="b/", full_path="a/b/c/d/e") == None
   True
 
   This shouldn't be so hard.
@@ -291,20 +291,12 @@ def make_indices(thumbs_root, images_root, thumbs_root_in_href,
 
   for (curdir, subdirs, filenames) in os.walk(thumbs_root, topdown=True):
     if len(filenames) > 0:
-
-      # This shouldn't be so hard.
-      # Just trying to take /a/b off of /a/b/c/d/e and get c/d/e
-      curdir_parts = curdir.split(os.path.sep)
-      thumbs_root_parts = thumbs_root.split(os.path.sep)
+      rootless = unroot(full_path=curdir, root_path=thumbs_root)
 
       # If they don't begin with the same stuff, have no idea what's going on
-      if curdir_parts[0: len(thumbs_root_parts)] != thumbs_root_parts:
+      if rootless == None:
         print(f"Real error: {curdir} doesn't begin with {thumbs_root}")
         exit(1)
-
-      rootless_parts = curdir_parts[len(thumbs_root_parts):]
-
-      rootless = os.path.join(*rootless_parts)
 
       cur_images_dir = os.path.join(images_root, rootless)
 
