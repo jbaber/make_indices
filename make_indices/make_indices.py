@@ -206,6 +206,22 @@ def image_thumbnails_in(filenames):
   ]
 
 
+def midsize_basename_from_thumb_basename(image_basename):
+  """
+  I've converted images with just blah.jpg -> t-blah.jpg
+                                  blah.png -> t-blah.png
+                                  etc.
+                              and blah.jpg -> t600-blah.jpg
+                                  blah.png -> t600-blah.png
+  Not handling videos yet
+  """
+  if is_an_image_thumbnail(image_basename):
+
+    # Cut off the t- and insert a t600-
+    return "t600-" + image_basename[2:]
+  return None
+
+
 def image_basename_from_thumb_basename(image_basename):
   """
   I've converted images with just blah.jpg -> t-blah.jpg
@@ -341,9 +357,19 @@ def make_indices(thumbs_root, images_root, thumbs_root_in_href,
         print(f"Creating {cur_index_filename}")
         fats = []
         for filename in filenames:
+
+          # If there's a midsize file, use that as the main image
+          midsize_filename = midsize_basename_from_thumb_basename(filename)
+          midsize_path = os.path.join(rootless, midsize_filename)
+          if os.path.isfile(midsize_path):
+            image_path = midsize_path
+          else:
+            image_path = os.path.join(rootless, image_basename_from_thumb_basename(filename))
+
+
           fats.append(
             {
-              "filename": os.path.join(rootless, image_basename_from_thumb_basename(filename)),
+              "filename": image_path,
               "thumb_filename": os.path.join(rootless, filename)
             }
           )
