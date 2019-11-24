@@ -305,8 +305,12 @@ def make_indices(thumbs_root, images_root, thumbs_root_in_href,
     index_root, clobber=False, *, itemsBaseURL):
   created_indices = []
 
+  # Traverse `thumbs_root` looking for thumbnails that correspond to images in `images_root`.
+  # If there's a midsize image, use that instead of the full image
+  import pdb; pdb.set_trace()
   for (curdir, subdirs, filenames) in os.walk(thumbs_root, topdown=True):
     if len(filenames) > 0:
+
       rootless = unroot(full_path=curdir, root_path=thumbs_root)
 
       # If they don't begin with the same stuff, have no idea what's going on
@@ -317,7 +321,6 @@ def make_indices(thumbs_root, images_root, thumbs_root_in_href,
       cur_images_dir = os.path.join(images_root, rootless)
 
       rootless_parts = rootless.split(os.path.sep)
-
       cur_index_filename = os.path.join(index_root, "_".join(["index"] + rootless_parts)) + ".html"
       cur_indexv_filename = os.path.join(index_root, "_".join(["indexv"] + rootless_parts)) + ".html"
 
